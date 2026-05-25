@@ -263,6 +263,10 @@ body .audio-toggle-btn {
   animation: floatMedium 4.5s ease-in-out infinite 0.5s; /* 4.5秒周期、0.5秒遅れで開始 */
 }
 
+.char-count-container{
+  animation: floatMedium 6.5s ease-in-out infinite 1s; 
+}
+
 /* 独り言ボタンの個別設定 */
 .fetch-whispers-btn {
   cursor: pointer;
