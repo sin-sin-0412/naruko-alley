@@ -54,6 +54,9 @@ export class World {
 
     // 修正: isRunning()の代わりにフラグで割り込み中かどうかを管理
     this.isInterrupting = false;
+
+    this.lastAnimationTime = 0; 
+    this.cooldownMs = 8000; // 8秒のクールダウン
   }
 
   // 霧
@@ -394,7 +397,11 @@ export class World {
   scheduleAnimation(name, minSec, maxSec) {
     const delay = (Math.random() * (maxSec - minSec) + minSec) * 1000;
     setTimeout(() => {
-      this.triggerAnimation(name);
+      const now = Date.now();
+      if (now - this.lastAnimationTime >= this.cooldownMs) {
+        this.lastAnimationTime = now;
+        this.triggerAnimation(name);
+      }
       this.scheduleAnimation(name, minSec, maxSec);
     }, delay);
   }
@@ -514,22 +521,22 @@ export class World {
   }
 
   setupSmokeCurtain() {
-  this.smokeMaterial = new THREE.ShaderMaterial({
-    transparent: true,
-    depthTest: false,
-    depthWrite: false,
-    uniforms: {
-      uProgress: { value: 0.0 }, // 0.0(真っ黒な煙) 〜 1.0(完全に消滅)
-      uAspect: { value: window.innerWidth / window.innerHeight }
-    },
-    vertexShader: `
+    this.smokeMaterial = new THREE.ShaderMaterial({
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+      uniforms: {
+        uProgress: { value: 0.0 }, // 0.0(真っ黒な煙) 〜 1.0(完全に消滅)
+        uAspect: { value: window.innerWidth / window.innerHeight },
+      },
+      vertexShader: `
       varying vec2 vUv;
       void main() {
         vUv = uv;
         gl_Position = vec4(position, 1.0); // 画面全体にフィット
       }
     `,
-    fragmentShader: `
+      fragmentShader: `
       uniform float uProgress;
       uniform float uAspect;
       varying vec2 vUv;
@@ -568,12 +575,12 @@ export class World {
           
           gl_FragColor = vec4(vec3(0.0), alpha);
         }
-    `
-  });
+    `,
+    });
 
-  const geometry = new THREE.PlaneGeometry(2, 2);
-  this.smokeMesh = new THREE.Mesh(geometry, this.smokeMaterial);
-  this.smokeMesh.renderOrder = 9999; // 最前面に描画
-  this.scene.add(this.smokeMesh);
-}
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    this.smokeMesh = new THREE.Mesh(geometry, this.smokeMaterial);
+    this.smokeMesh.renderOrder = 9999; // 最前面に描画
+    this.scene.add(this.smokeMesh);
+  }
 }
