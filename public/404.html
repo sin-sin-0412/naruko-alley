@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 | 鳴言小路</title>
+    <link rel="icon" href="/image/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/image/apple.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One&display=swap" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      html, body {
+        font-family: "Klee One", cursive;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        color: rgba(255,255,255,0.75);
+      }
+
+      /* 背景の粒子 */
+      .bg-particles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .particle {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 50%;
+        animation: drift linear infinite;
+      }
+
+      @keyframes drift {
+        0%   { transform: translateY(100vh) scale(1); opacity: 0; }
+        10%  { opacity: 1; }
+        90%  { opacity: 0.6; }
+        100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+      }
+
+      /* メインコンテナ */
+      .container {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        gap: 0;
+        filter: url(#water-wave-404);
+      }
+
+      /* 404 数字 */
+      .error-number {
+        font-size: clamp(6rem, 18vw, 12rem);
+        letter-spacing: 0.4em;
+        color: rgba(255,255,255,0.07);
+        line-height: 1;
+        user-select: none;
+        animation: floatSlow 8s ease-in-out infinite;
+      }
+
+      /* タイトル */
+      .error-title {
+        font-size: clamp(1rem, 3vw, 1.4rem);
+        letter-spacing: 0.6em;
+        color: rgba(255,255,255,0.55);
+        margin-top: -1rem;
+        animation: floatMedium 6s ease-in-out infinite 0.5s;
+      }
+
+      /* 説明文 */
+      .error-message {
+        margin-top: 3rem;
+        text-align: center;
+        line-height: 2.2;
+        animation: floatMedium 7s ease-in-out infinite 1s;
+      }
+      .error-message .ja {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.45);
+        letter-spacing: 0.15em;
+        display: block;
+      }
+      .error-message .en {
+        font-size: 0.65rem;
+        color: rgba(255,255,255,0.22);
+        letter-spacing: 0.25em;
+        display: block;
+        margin-top: 0.3rem;
+      }
+
+      /* 仕切り線 */
+      .divider {
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+        margin: 2rem 0;
+        animation: floatMedium 5s ease-in-out infinite;
+      }
+
+      /* 戻るリンク */
+      .back-link {
+        display: inline-block;
+        font-size: 0.8rem;
+        letter-spacing: 0.3em;
+        color: rgba(255,255,255,0.35);
+        text-decoration: none;
+        border: 1px solid rgba(255,255,255,0.15);
+        padding: 8px 24px;
+        transition: background 0.4s, color 0.4s, border-color 0.4s;
+        animation: floatMedium 5.5s ease-in-out infinite 0.3s;
+      }
+      .back-link:hover {
+        background: rgba(255,255,255,0.06);
+        color: rgba(255,255,255,0.7);
+        border-color: rgba(255,255,255,0.35);
+      }
+
+      @keyframes floatSlow {
+        0%, 100% { transform: translate3d(0, 0, 0); }
+        50%       { transform: translate3d(4px, -6px, 0); }
+      }
+      @keyframes floatMedium {
+        0%, 100% { transform: translate3d(0, 0, 0); }
+        50%       { transform: translate3d(3px, -4px, 0); }
+      }
+      @keyframes vanishSmoke {
+        0%   { opacity: 0; transform: translateY(0) scale(1); filter: blur(0px); }
+        3%   { opacity: var(--op, 0.12); }
+        92%  { opacity: var(--op, 0.12); transform: translateY(-15px) scale(1); filter: blur(0px); }
+        100% { opacity: 0; transform: translateY(-30px) scale(1.03); filter: blur(4px); }
+      }
+
+      @media (max-width: 480px) {
+        .error-number  { letter-spacing: 0.2em; }
+        .error-title   { letter-spacing: 0.3em; font-size: 0.85rem; }
+        .back-link     { font-size: 0.72rem; padding: 8px 18px; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+      <defs>
+        <filter id="water-wave-404">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="1" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <!-- 背景の粒子 -->
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+      <p class="error-number">404</p>
+      <p class="error-title">なるこ小路</p>
+
+      <div class="divider"></div>
+
+      <div class="error-message">
+        <span class="ja">この道の先には何もありませんでした。</span>
+        <span class="en">The path you sought does not exist here.</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <a class="back-link" href="/">小路へ戻る</a>
+    </div>
+
+    <script>
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 3 + 1;
+        p.style.cssText = [
+          `left:${Math.random()*100}%`,
+          `width:${size}px`,
+          `height:${size}px`,
+          `animation-duration:${10 + Math.random()*20}s`,
+          `animation-delay:${Math.random()*15}s`
+        ].join(';');
+        frag.appendChild(p);
+      }
+      document.getElementById('particles').appendChild(frag);
+    </script>
+  </body>
+</html>

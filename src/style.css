@@ -1,0 +1,454 @@
+@import url("https://fonts.googleapis.com/css2?family=Klee+One&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Klee One", cursive;
+  font-weight: 400;
+  font-style: normal;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+button,
+input {
+  font-family: "Klee One", cursive;
+}
+
+::placeholder {
+  color: rgba(161, 252, 248, 0.575);
+}
+
+/* ローディング画面が存在するときは、UIコンテナとオーディオボタンを隠す */
+body #ui-container,
+body .audio-toggle-btn {
+  opacity: 0;
+  visibility: hidden; 
+}
+
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: transparent; /* 背景はWebGL側が煙にするので透明 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+.loading-titles {
+  text-align: center;
+  color: #6b6b6b;
+  filter: url(#water-wave);
+}
+.main-title { font-size: 1.5rem; letter-spacing: 0.5rem; margin-bottom: 0.5rem; animation: floatMedium 3.5s ease-in-out infinite 0.5s;}
+.sub-title { font-size: 0.8rem; letter-spacing: 0.3rem; opacity: 0.7; }
+.main-title span, .sub-title span {
+  display: inline-block;
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  transform: scale(1.2);
+}
+
+/* --- クレジット --- */
+.credit {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: opacity 1s ease, color 0.3s ease;
+}
+.credit.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.credit:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* --- チャットUI用スタイル --- */
+
+/* UI全体を覆うコンテナ。3D操作を邪魔しないようクリックを貫通させる */
+#ui-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ボタンやパネルなど、操作したい要素だけクリックを有効化 */
+.chat-toggle-btn,
+.chat-panel,
+.chat-input-name,
+.chat-input-message,
+.chat-send-btn {
+  pointer-events: auto;
+}
+
+/* --- チャット開閉ボタン (右下) --- */
+.chat-toggle-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.497);
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 100;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+.chat-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* --- チャットパネル本体 --- */
+.chat-panel {
+  position: absolute;
+  bottom: 80px; /* 開閉ボタンの少し上に配置 */
+  right: 30px;
+  width: 500px;
+  max-width: 90vw; /* スマホではみ出さないための防波堤 */
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  background: transparent; /* 枠なし・背景なし */
+
+  /* ぼわっと出現するアニメーション設定 */
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+/* 非表示状態のクラス (JSで付け外しする) */
+.chat-panel.hidden {
+  opacity: 0;
+  pointer-events: none; /* 消えている時はクリック不可に */
+}
+
+/* --- タイムラインエリア (枠なし) --- */
+.chat-timeline {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 15px;
+  /* 追加: 上下グラデーションフェード (上下20pxをぼかす) */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 20px,
+    black calc(100% - 20px),
+    transparent 100%
+  );
+}
+
+.chat-spacer {
+  flex: 1;
+}
+
+/* カスタムスクロールバー (常時は透明にして見えなくする) */
+.chat-timeline::-webkit-scrollbar {
+  width: 2px;
+}
+.chat-timeline::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat-timeline::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 2px;
+}
+
+/* スクロール中 (.is-scrolling) のみ色をつけて表示する */
+.chat-timeline.is-scrolling::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+.chat-timeline.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- 入力エリア --- */
+.chat-input-area {
+  display: flex;
+  flex-direction: column; /* 追加: 縦に並べる */
+  gap: 10px;
+}
+
+/* 下段のボタンを横並びにするコンテナ */
+.chat-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+}
+
+/* 入力欄と送信ボタンの共通スタイル (枠あり・直角・透明) */
+.chat-input-name,
+.chat-input-message,
+.chat-send-btn,
+.fetch-whispers-btn {
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.3s,
+    background 0.3s;
+  will-change: transform;
+}
+
+/* textarea特有の設定 */
+.chat-input-message {
+  resize: none; /* ユーザーによるサイズ変更を禁止してデザイン崩れを防ぐ */
+  font-family: inherit;
+  height: 80px;
+}
+
+/* 入力中に枠線を少しだけ明るくして操作感を出す */
+.chat-input-name:focus,
+.chat-input-message:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- アニメーション・各パーツの個別調整 --- */
+
+.chat-input-name {
+  animation: floatMedium 5s ease-in-out infinite;
+}
+
+.chat-input-message {
+  animation: floatMedium 6.5s ease-in-out infinite 1s; /* 6.5秒周期、1秒遅れで開始 */
+}
+
+.chat-send-btn {
+  cursor: pointer;
+  animation: floatMedium 4.5s ease-in-out infinite 0.5s; /* 4.5秒周期、0.5秒遅れで開始 */
+}
+
+/* 独り言ボタンの個別設定 */
+.fetch-whispers-btn {
+  cursor: pointer;
+  animation: floatMedium 5.5s ease-in-out infinite 0.2s;
+}
+
+/* ホバー時の背景色を共通化 */
+.chat-send-btn:hover,
+.fetch-whispers-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* disabled時のスタイル (ステップ3のJSで付与された際の見た目) */
+.chat-send-btn:disabled,
+.chat-input-name:disabled,
+.chat-input-message:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 「誰かの独り言を見る」ボタンのスタイルは、今後のステップで追加します */
+.fetch-whispers-btn.hidden {
+  display: block;
+}
+
+/* ふよふよアニメーション (振れ幅: 中) */
+@keyframes floatMedium {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(3px, -2px, 0px);
+  } /* 上に6px浮いて戻る */
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* --- タイムライン内のメッセージアイテム --- */
+
+.chat-message-item {
+  margin-bottom: 20px;
+  word-wrap: break-word; /* 長いテキストが枠をはみ出さないように折り返す */
+  will-change: transform, opacity;
+  opacity: 0; /* フェードイン前は透明にしておく */
+}
+
+.chat-message-name {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5); /* 名前は少し控えめな色に */
+  margin-bottom: 4px;
+}
+
+.chat-message-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+/* 透明度のみのフェードイン (位置の移動はふよふよアニメーションに任せるため) */
+@keyframes fadeInOpacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- 空間に漂う独り言用のスタイル --- */
+
+/* 漂う独り言を配置するコンテナ。チャットパネルの奥に配置 */
+#whispers-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* クリックを貫通させる */
+  z-index: 5;
+  overflow: hidden; /* 画面外にはみ出た分は隠す */
+}
+
+/* 漂う独り言の1つ1つのアイテム */
+.whisper-item {
+  position: absolute;
+  text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap; /* 改行させない */
+  pointer-events: none;
+  opacity: 0; /* JSでアニメーションを付与するまでは透明 */
+  will-change:
+    transform, opacity, filter; /* 💡パフォーマンス向上: ブラウザにアニメーションを事前通知 */
+}
+
+/* 控えめなふよふよアニメーション (振れ幅: 小) */
+@keyframes floatSmall {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(2px, -5px, 4px);
+  } /* タイムラインより動きを小さく */
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 煙のように消えるアニメーション (3分間かけて実行される想定) */
+@keyframes vanishSmoke {
+  0% {
+    opacity: 0;
+    filter: blur(0px);
+    transform: translateY(0) scale(1);
+  }
+  2% {
+    opacity: var(--op, 1); /* 開始直後にふわっと出現 */
+    filter: blur(0px);
+    transform: translateY(0) scale(1);
+  }
+  95% {
+    opacity: var(--op, 1); /* ほぼ最後まで表示を維持 */
+    filter: blur(0px);
+    transform: translateY(-10px) scale(1); /* ゆっくり上に登る */
+  }
+  100% {
+    opacity: 0;
+    filter: blur(5px); /* 最後は煙のようにぼやけて消える */
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* オーディオ関連 */
+
+.audio-toggle-btn {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+  opacity: 0.4;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  pointer-events: auto;
+  transition: opacity 0.3s;
+  border: none;
+}
+.audio-toggle-btn:hover {
+  opacity: 0.3 !important;
+}
+.audio-toggle-btn.is-playing {
+  opacity: 0.3 !important;
+}
+
+@media (max-width: 768px) {
+  .chat-toggle-btn {
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(39, 71, 82, 0.176);
+  }
+
+  .chat-toggle-btn:hover {
+    background-color: rgba(39, 71, 82, 0.176);
+    color: #fff;
+  }
+
+  .chat-panel {
+    bottom: 50px;
+    right: 0px;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    height: 70%;
+  }
+
+  .chat-input-name,
+  .chat-input-message,
+  .chat-send-btn,
+  .fetch-whispers-btn {
+    background-color: rgba(39, 71, 82, 0.176);
+  }
+
+  .credit {
+    bottom: 10px;
+    left: 10px;
+  }
+}
