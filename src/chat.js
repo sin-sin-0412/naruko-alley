@@ -8,6 +8,7 @@ const chatSendBtn = document.getElementById("chat-send-btn");
 const fetchWhispersBtn = document.getElementById("fetch-whispers-btn");
 const whispersContainer = document.getElementById("whispers-container");
 const credit = document.getElementById("credit");
+const charCount = document.getElementById("char-count");
 import { supabase } from "./supabase.js";
 
 // 独り言の表示状態とタイマーを管理する変数
@@ -66,7 +67,7 @@ chatSendBtn.addEventListener("click", async () => {
   const finalName = rawName !== "" ? rawName : "誰かさん";
 
   // 2. 文字数制限の念押し (HTMLのmaxlengthでも防いでいるがJSでも念のためカット)
-  const finalMessage = rawMessage.substring(0, 200);
+  const finalMessage = rawMessage.substring(0, 50);
 
   // タイムラインにメッセージを追加する関数を実行
   addMessageToTimeline(finalName, finalMessage);
@@ -76,6 +77,8 @@ chatSendBtn.addEventListener("click", async () => {
 
   // 送信後、メッセージ入力欄だけを空にする（名前はセッション固定の要件に向け残す）
   chatMessageInput.value = "";
+
+  charCount.textContent = 0;
 
   // SupabaseのRPC（データベース関数）を呼び出して保存する
   try {
@@ -412,3 +415,15 @@ function clearWhispers() {
     whispersContainer.style.transition = "";
   }, 1000);
 }
+
+/**
+ * メッセージ入力欄の文字数をリアルタイムにカウントする処理
+ */
+chatMessageInput.addEventListener("input", () => {
+  // 現在入力されている文字の長さを取得
+  const currentLength = chatMessageInput.value.length;
+  
+  // HTMLの「0」の部分を、現在の文字数に書き換える
+  charCount.textContent = currentLength;
+});
+
