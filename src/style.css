@@ -226,7 +226,7 @@ body .audio-toggle-btn {
   border: 1px solid rgba(255, 255, 255, 0.2);
   background: transparent;
   color: rgba(255, 255, 255, 0.9);
-  padding: 10px;
+  padding: 5px;
   font-size: 14px;
   outline: none;
   transition:
@@ -239,7 +239,7 @@ body .audio-toggle-btn {
 .chat-input-message {
   resize: none; /* ユーザーによるサイズ変更を禁止してデザイン崩れを防ぐ */
   font-family: inherit;
-  height: 80px;
+  height: 65px;
 }
 
 /* 入力中に枠線を少しだけ明るくして操作感を出す */
@@ -308,6 +308,10 @@ body .audio-toggle-btn {
   word-wrap: break-word; /* 長いテキストが枠をはみ出さないように折り返す */
   will-change: transform, opacity;
   opacity: 0; /* フェードイン前は透明にしておく */
+}
+
+#chat-message {
+  overflow: hidden;
 }
 
 .chat-message-name {
