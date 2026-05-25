@@ -178,7 +178,7 @@ function disableInputsForSeconds(seconds) {
 
   // 視覚的にもわかりやすくするため、ボタンのテキストを変更
   const originalText = chatSendBtn.textContent;
-  chatSendBtn.textContent = "送信中...";
+  chatSendBtn.textContent = "....";
 
   // 指定秒数(ミリ秒)後に元に戻す
   setTimeout(() => {
