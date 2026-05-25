@@ -24,13 +24,34 @@ chatToggleBtn.addEventListener("click", () => {
   // これにより、CSSのtransitionが反応して「ぼわっと」アニメーションする
   chatPanel.classList.toggle("hidden");
 
+  function measureButtonWidth(btn, text) {
+    const clone = btn.cloneNode(true);
+    clone.style.width = "auto";
+    clone.style.visibility = "hidden";
+    clone.style.position = "fixed";
+    clone.textContent = text;
+    document.body.appendChild(clone);
+    const width = clone.offsetWidth;
+    document.body.removeChild(clone);
+    return width;
+  }
+
   // パネルの状態に合わせてボタンのテキストを変更する
   if (chatPanel.classList.contains("hidden")) {
+    const targetWidth = measureButtonWidth(chatToggleBtn, "言葉を残す");
+    chatToggleBtn.style.width = chatToggleBtn.offsetWidth + "px";
     chatToggleBtn.textContent = "言葉を残す";
+    requestAnimationFrame(() => {
+      chatToggleBtn.style.width = targetWidth + "px";
+    });
     credit.classList.add("hidden");
   } else {
+    const targetWidth = measureButtonWidth(chatToggleBtn, "閉じる");
+    chatToggleBtn.style.width = chatToggleBtn.offsetWidth + "px";
     chatToggleBtn.textContent = "閉じる";
-    credit.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      chatToggleBtn.style.width = targetWidth + "px";
+    });
     // パネルを開いた（戻した）ときに、独り言が漂っていれば同期して消去する
     if (isWhispersActive) {
       clearWhispers();
@@ -422,8 +443,7 @@ function clearWhispers() {
 chatMessageInput.addEventListener("input", () => {
   // 現在入力されている文字の長さを取得
   const currentLength = chatMessageInput.value.length;
-  
+
   // HTMLの「0」の部分を、現在の文字数に書き換える
   charCount.textContent = currentLength;
 });
-
