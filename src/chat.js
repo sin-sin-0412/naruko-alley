@@ -7,7 +7,7 @@ const chatMessageInput = document.getElementById("chat-message");
 const chatSendBtn = document.getElementById("chat-send-btn");
 const fetchWhispersBtn = document.getElementById("fetch-whispers-btn");
 const whispersContainer = document.getElementById("whispers-container");
-const credit = document.getElementById("credit");
+const credit = document.getElementById("credit-area");
 const charCount = document.getElementById("char-count");
 import { supabase } from "./supabase.js";
 
@@ -52,6 +52,7 @@ chatToggleBtn.addEventListener("click", () => {
     requestAnimationFrame(() => {
       chatToggleBtn.style.width = targetWidth + "px";
     });
+    credit.classList.remove("hidden");
     // パネルを開いた（戻した）ときに、独り言が漂っていれば同期して消去する
     if (isWhispersActive) {
       clearWhispers();

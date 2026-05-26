@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
@@ -6,42 +6,63 @@
     <title>鳴言小路 | Naruko Alley</title>
     <meta name="description" content="言葉が響く商店街" />
 
-    <link rel="icon" href="/image/favicon.png" sizes="32x32">
-    <link rel="apple-touch-icon" href="/image/apple.png">
+    <link rel="icon" href="/image/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/image/apple.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="鳴言小路 | Naruko Alley" />
     <meta name="twitter:description" content="言葉が響く商店街" />
-    <meta name="twitter:image" content="https://naruko-alley.netlify.app/image/ogp.jpg" />
+    <meta
+      name="twitter:image"
+      content="https://naruko-alley.netlify.app/image/ogp.jpg"
+    />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="鳴言小路 | Naruko Alley" />
     <meta property="og:description" content="言葉が響く商店街" />
-    <meta property="og:image" content="https://naruko-alley.netlify.app/image/ogp.jpg" />
+    <meta
+      property="og:image"
+      content="https://naruko-alley.netlify.app/image/ogp.jpg"
+    />
     <meta property="og:url" content="https://naruko-alley.netlify.app/" />
     <meta property="og:site_name" content="鳴言小路 | Naruko Alley" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
     <div id="loading-screen">
-  <div class="loading-titles">
-    <h1 class="main-title">
-      <span>な</span><span>る</span><span>こ</span><span>小</span><span>路</span>
-    </h1>
-    <p class="sub-title">
-      <span>N</span><span>a</span><span>r</span><span>u</span><span>k</span><span>o</span><span>&nbsp;</span><span>A</span><span>l</span><span>l</span><span>e</span><span>y</span>
-    </p>
-  </div>
-</div>
+      <div class="loading-titles">
+        <h1 class="main-title">
+          <span>な</span><span>る</span><span>こ</span><span>小</span
+          ><span>路</span>
+        </h1>
+        <p class="sub-title">
+          <span>N</span><span>a</span><span>r</span><span>u</span><span>k</span
+          ><span>o</span><span>&nbsp;</span><span>A</span><span>l</span
+          ><span>l</span><span>e</span><span>y</span>
+        </p>
+      </div>
+    </div>
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <defs>
-    <filter id="water-wave">
-      <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="1" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" result="displacement" />
-    </filter>
-  </defs>
-</svg>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <defs>
+        <filter id="water-wave">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.1"
+            numOctaves="1"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="0"
+            xChannelSelector="R"
+            yChannelSelector="G"
+            result="displacement"
+          />
+        </filter>
+      </defs>
+    </svg>
 
     <canvas id="canvas"></canvas>
 
@@ -51,40 +72,66 @@
 
     <!-- 3D空間の手前に重ねるUIコンテナ -->
     <div id="ui-container">
-
       <!-- 空間に漂う独り言を配置する専用コンテナ -->
       <div id="whispers-container"></div>
-      
+
       <div id="chat-panel" class="chat-panel hidden">
-      <!-- 枠なしのタイムラインエリア -->
-      <div id="chat-timeline" class="chat-timeline">
-        <div class="chat-spacer"></div>
-      </div>
-      
-      <!-- 入力エリアを三段編成に変更 -->
-      <div class="chat-input-area">
-        <!-- 上段: 名前 -->
-        <input type="text" id="chat-name" class="chat-input-name" placeholder="名前 (10文字まで)" maxlength="10">
-        <!-- 中段: メッセージ (textareaに変更し、複数行対応に) -->
-        <textarea id="chat-message" class="chat-input-message" placeholder="つぶやいた独り言は誰かのもとに届きます" maxlength="50" rows="3"></textarea>
-        <div class="char-count-container" style="color: white; text-align: right; font-size: 12px; opacity: 0.6;">
-          <span id="char-count">0</span> / 50
+        <!-- 枠なしのタイムラインエリア -->
+        <div id="chat-timeline" class="chat-timeline">
+          <div class="chat-spacer"></div>
         </div>
-        <!-- 下段: ボタンエリア (横並び) -->
-        <div class="chat-actions">
-          <button id="chat-send-btn" class="chat-send-btn">送る</button>
-          <button id="fetch-whispers-btn" class="fetch-whispers-btn hidden">誰かの独り言を見る</button>
+
+        <!-- 入力エリアを三段編成に変更 -->
+        <div class="chat-input-area">
+          <!-- 上段: 名前 -->
+          <input
+            type="text"
+            id="chat-name"
+            class="chat-input-name"
+            placeholder="名前 (10文字まで)"
+            maxlength="10"
+          />
+          <!-- 中段: メッセージ (textareaに変更し、複数行対応に) -->
+          <textarea
+            id="chat-message"
+            class="chat-input-message"
+            placeholder="つぶやいた独り言は誰かのもとに届きます"
+            maxlength="50"
+            rows="3"
+          ></textarea>
+          <div
+            class="char-count-container"
+            style="
+              color: white;
+              text-align: right;
+              font-size: 12px;
+              opacity: 0.6;
+            "
+          >
+            <span id="char-count">0</span> / 50
+          </div>
+          <!-- 下段: ボタンエリア (横並び) -->
+          <div class="chat-actions">
+            <button id="chat-send-btn" class="chat-send-btn">送る</button>
+            <button id="fetch-whispers-btn" class="fetch-whispers-btn hidden">
+              誰かの独り言を見る
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-      
+
       <!-- チャット開閉ボタン  -->
       <button id="chat-toggle-btn" class="chat-toggle-btn">言葉を残す</button>
-      <a id="credit" class="credit hidden" href="https://x.com/sinsin_chaos" target="_blank">Created by Shinya</a>
+      <div id="credit-area" class="credit-area hidden">
+        <a class="credit" href="https://x.com/sinsin_chaos" target="_blank"
+          >Created by Shinya</a
+        >
+        <p class="privacy-note">連投防止のためIPアドレスを一時保存しています</p>
+      </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/chat.js"></script> 
+    <script type="module" src="/src/chat.js"></script>
     <script type="module" src="/src/audio.js"></script>
   </body>
 </html>

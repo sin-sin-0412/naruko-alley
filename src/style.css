@@ -70,22 +70,36 @@ body .audio-toggle-btn {
 }
 
 /* --- クレジット --- */
-.credit {
+.credit-area {
   position: absolute;
   bottom: 30px;
   left: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: opacity 1s ease;
+}
+
+.credit-area.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.credit {
   color: rgba(255, 255, 255, 0.4);
   font-size: 12px;
   text-decoration: none;
   pointer-events: auto;
-  transition: opacity 1s ease, color 0.3s ease;
-}
-.credit.hidden {
-  opacity: 0;
-  pointer-events: none;
+  transition: color 0.3s ease;
 }
 .credit:hover {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.privacy-note {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
 }
 
 /* --- チャットUI用スタイル --- */
