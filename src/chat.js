@@ -385,7 +385,7 @@ function displayWhispers(messages, isMobile) {
     // --- はみ出し・折り返し対策 ---
     el.style.whiteSpace = "pre-wrap";
     el.style.wordBreak = "break-all";
-    el.style.maxWidth = isMobile ? "40vw" : "20vw";
+    el.style.maxWidth = isMobile ? "40vw" : "17vw";
 
     // --- フォントサイズのスマホ最適化 ---
     const fontSize = isMobile
