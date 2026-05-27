@@ -84,6 +84,7 @@ chatSendBtn.addEventListener("click", async () => {
 
   // メッセージが空の場合は処理を中断（何もせず終了）
   if (!rawMessage) return;
+  const isTooShort = [...rawMessage].length < 3;
 
   // 1. 名前未入力時は「誰かさん」にする
   const finalName = rawName !== "" ? rawName : "誰かさん";
@@ -106,9 +107,11 @@ chatSendBtn.addEventListener("click", async () => {
   try {
     // 画面への表示（addMessageToTimeline）を先に済ませてから裏で保存通信を行っています。
     // これを「楽観的UI（Optimistic UI）」と呼び、ユーザーに待ち時間を感じさせないプロのテクニックです。
-    const { error } = await supabase.rpc("send_lonely_message", {
-      p_message: finalMessage, // SQLで定義した引数名(p_message)に合わせる
-    });
+    if (!isTooShort) {
+      const { error } = await supabase.rpc("send_lonely_message", {
+        p_message: finalMessage, // SQLで定義した引数名(p_message)に合わせる
+      });
+    }
 
     if (error) {
       // サーバー側でエラー（URL入りや3秒以内の連投など）弾かれた場合の処理
