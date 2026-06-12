@@ -235,7 +235,12 @@ class App {
 
     // カメラに値を適用
     this.world.camera.fov = targetFov;
-    this.world.camera.position.set(targetX, targetY, targetZ);
+    if (this.world.cameraBasePosition) {
+      this.world.cameraBasePosition.set(targetX, targetY, targetZ);
+    } else {
+      // 念のためのフォールバック
+      this.world.camera.position.set(targetX, targetY, targetZ);
+    }
     // ルックアット
     this.world.camera.lookAt(0, 3, 0);
     // 行列を更新（これを忘れると反映されない）

@@ -25,6 +25,9 @@ export class World {
     this.camera.lookAt(0, 3, 0);
     this.scene.add(this.camera);
 
+    this.elapsedTime = 0; // 全体の経過時間を保持
+    this.cameraBasePosition = new THREE.Vector3(0, 1.5, 8.8); // カメラの基準位置
+
     this.setupFog();
     this.setupLights();
     this.loadModel();
@@ -480,6 +483,28 @@ export class World {
 
   //! 毎フレーム更新処理
   update(delta) {
+    this.elapsedTime += delta; // 経過時間の加算
+
+    if (this.camera && this.cameraBasePosition) {
+      // 周期(秒)と揺れ幅(amplitude)の設定
+      const breathPeriodX = 7.5; // X軸(左右)は7.5秒で1ループ
+      const breathPeriodZ = 8.0; // Z軸(前後)は8秒で1ループ
+      const amplitudeX = 0.002;  // 【超極小】点線が横走りしない限界の細かさ
+      const amplitudeZ = 0.004;  // 前後の心地よい浮遊感
+
+      // サイン波・コサイン波でオフセットを計算
+      const breathX = Math.sin(this.elapsedTime * (Math.PI * 2 / breathPeriodX)) * amplitudeX;
+      const breathZ = Math.cos(this.elapsedTime * (Math.PI * 2 / breathPeriodZ)) * amplitudeZ;
+
+      // Y（上下）の呼吸は完全に固定し、X（左右）と Z（前後）のみ微細に動かす
+      this.camera.position.x = this.cameraBasePosition.x + breathX;
+      this.camera.position.y = this.cameraBasePosition.y; // Yは固定
+      this.camera.position.z = this.cameraBasePosition.z + breathZ;
+
+      // 常に中央を見つめさせる
+      this.camera.lookAt(0, 3, 0);
+    }
+    
     if (this.mixer) {
       this.mixer.update(delta);
     }
