@@ -23,7 +23,7 @@ input {
 }
 
 ::placeholder {
-  color: rgba(161, 252, 248, 0.575);
+  color: rgba(161, 252, 247, 0.369);
 }
 
 /* ローディング画面が存在するときは、UIコンテナとオーディオボタンを隠す */
@@ -126,11 +126,16 @@ body .audio-toggle-btn {
 
 /* --- チャット開閉ボタン (右下) --- */
 .chat-toggle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
   position: absolute;
   bottom: 30px;
   right: 30px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 0px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
   color: rgba(255, 255, 255, 0.497);
   padding: 5px 10px;
   cursor: pointer;
@@ -240,9 +245,10 @@ body .audio-toggle-btn {
 .chat-send-btn,
 .fetch-whispers-btn {
   border-radius: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent;
-  color: rgba(255, 255, 255, 0.9);
+  border: 0px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: #63808211;
+  color: rgba(255, 255, 255, 0.497);
   padding: 5px;
   font-size: 14px;
   outline: none;
@@ -250,6 +256,14 @@ body .audio-toggle-btn {
     border-color 0.3s,
     background 0.3s;
   will-change: transform;
+}
+
+.chat-send-btn,
+.fetch-whispers-btn{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.4;
 }
 
 /* textarea特有の設定 */
@@ -294,6 +308,7 @@ body .audio-toggle-btn {
 .chat-send-btn:hover,
 .fetch-whispers-btn:hover {
   background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 /* disabled時のスタイル (ステップ3のJSで付与された際の見た目) */
@@ -304,9 +319,15 @@ body .audio-toggle-btn {
   cursor: not-allowed;
 }
 
-/* 「誰かの独り言を見る」ボタンのスタイルは、今後のステップで追加します */
-.fetch-whispers-btn.hidden {
-  display: block;
+/* 英語表記関連 */
+.btn-ja {
+  font-size: 1em; 
+}
+
+.btn-en {
+  font-size: 0.75em;
+  opacity: 0.5;
+  letter-spacing: 0.05em;
 }
 
 /* ふよふよアニメーション (振れ幅: 中) */
@@ -448,7 +469,7 @@ body .audio-toggle-btn {
   .chat-toggle-btn {
     bottom: 10px;
     right: 10px;
-    background-color: rgba(39, 71, 82, 0.176);
+    background-color: rgba(90, 124, 135, 0.176);
   }
 
   .chat-toggle-btn:hover {
@@ -457,7 +478,7 @@ body .audio-toggle-btn {
   }
 
   .chat-panel {
-    bottom: 50px;
+    bottom: 60px;
     right: 0px;
     right: 0;
     left: 0;
@@ -469,11 +490,16 @@ body .audio-toggle-btn {
   .chat-input-message,
   .chat-send-btn,
   .fetch-whispers-btn {
-    background-color: rgba(39, 71, 82, 0.176);
+    background-color: rgba(90, 124, 135, 0.176);
+    color: #fff;
   }
 
   .credit {
     bottom: 10px;
     left: 10px;
+  }
+
+  .credit-area{
+    visibility: hidden; 
   }
 }

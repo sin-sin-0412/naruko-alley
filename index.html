@@ -88,14 +88,14 @@
             type="text"
             id="chat-name"
             class="chat-input-name"
-            placeholder="名前 (10文字まで)"
+            placeholder="名前 / name (10文字まで)"
             maxlength="10"
           />
           <!-- 中段: メッセージ (textareaに変更し、複数行対応に) -->
           <textarea
             id="chat-message"
             class="chat-input-message"
-            placeholder="つぶやいた独り言は誰かのもとに届きます"
+            placeholder="つぶやいた独り言は誰かのもとに届きます / Your thoughts will reach someone."
             maxlength="50"
             rows="3"
           ></textarea>
@@ -112,16 +112,16 @@
           </div>
           <!-- 下段: ボタンエリア (横並び) -->
           <div class="chat-actions">
-            <button id="chat-send-btn" class="chat-send-btn">送る</button>
+            <button id="chat-send-btn" class="chat-send-btn">送る<span class="btn-en">Send</span></button>
             <button id="fetch-whispers-btn" class="fetch-whispers-btn hidden">
-              誰かの独り言を見る
+              誰かの独り言を見る<span class="btn-en">Discover</span>
             </button>
           </div>
         </div>
       </div>
 
       <!-- チャット開閉ボタン  -->
-      <button id="chat-toggle-btn" class="chat-toggle-btn">言葉を残す</button>
+      <button id="chat-toggle-btn" class="chat-toggle-btn">言葉を残す<span class="btn-en">Write</span></button>
       <div id="credit-area" class="credit-area hidden">
         <a class="credit" href="https://x.com/sinsin_chaos" target="_blank"
           >Created by Shinya</a

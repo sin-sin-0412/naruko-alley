@@ -40,15 +40,18 @@ chatToggleBtn.addEventListener("click", () => {
   if (chatPanel.classList.contains("hidden")) {
     const targetWidth = measureButtonWidth(chatToggleBtn, "言葉を残す");
     chatToggleBtn.style.width = chatToggleBtn.offsetWidth + "px";
-    chatToggleBtn.textContent = "言葉を残す";
+    chatToggleBtn.innerHTML = `<span class="btn-ja">言葉を残す</span><span class="btn-en">Write</span>`;
+
     requestAnimationFrame(() => {
       chatToggleBtn.style.width = targetWidth + "px";
     });
     credit.classList.add("hidden");
   } else {
     const targetWidth = measureButtonWidth(chatToggleBtn, "閉じる");
+
     chatToggleBtn.style.width = chatToggleBtn.offsetWidth + "px";
-    chatToggleBtn.textContent = "閉じる";
+    chatToggleBtn.innerHTML = `<span class="btn-ja">閉じる</span><span class="btn-en">Close</span>`;
+
     requestAnimationFrame(() => {
       chatToggleBtn.style.width = targetWidth + "px";
     });
@@ -182,10 +185,6 @@ function disableInputsForSeconds(seconds) {
   chatMessageInput.disabled = true;
   chatSendBtn.disabled = true;
 
-  // 視覚的にもわかりやすくするため、ボタンのテキストを変更
-  const originalText = chatSendBtn.textContent;
-  chatSendBtn.textContent = "....";
-
   // 指定秒数(ミリ秒)後に元に戻す
   setTimeout(() => {
     chatNameInput.disabled = false;
@@ -260,7 +259,7 @@ fetchWhispersBtn.addEventListener("click", async () => {
         // スマホでパネルが消えたままなら、自動でフェードインして戻す
         if (isMobile && chatPanel.classList.contains("hidden")) {
           chatPanel.classList.remove("hidden");
-          chatToggleBtn.textContent = "閉じる";
+          chatToggleBtn.innerHTML = `<span class="btn-ja">閉じる</span><span class="btn-en">Close</span>`;
         }
       }
     }, 180000);
