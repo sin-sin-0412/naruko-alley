@@ -236,7 +236,7 @@ body .audio-toggle-btn {
 .chat-actions {
   display: flex;
   flex-direction: row-reverse;
-  gap: 10px;
+  gap: 20px;
 }
 
 /* 入力欄と送信ボタンの共通スタイル (枠あり・直角・透明) */
@@ -249,7 +249,7 @@ body .audio-toggle-btn {
   border-radius: 5px;
   background: #63808211;
   color: rgba(255, 255, 255, 0.497);
-  padding: 5px;
+  padding: 5px 10px;
   font-size: 14px;
   outline: none;
   transition:
@@ -470,6 +470,9 @@ body .audio-toggle-btn {
     bottom: 10px;
     right: 10px;
     background-color: rgba(90, 124, 135, 0.176);
+    color: #ffffffa3;
+    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.467);
+
   }
 
   .chat-toggle-btn:hover {
@@ -491,8 +494,15 @@ body .audio-toggle-btn {
   .chat-send-btn,
   .fetch-whispers-btn {
     background-color: rgba(90, 124, 135, 0.176);
-    color: #fff;
+    color: #ffffffa3;
+    text-shadow: 0px 0px 20px rgba(0,0,0,0.8);
   }
+
+  .btn-en {
+  font-size: 0.75em;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
 
   .credit {
     bottom: 10px;
