@@ -424,7 +424,7 @@ body .audio-toggle-btn {
     filter: blur(0px);
     transform: translateY(0) scale(1);
   }
-  2% {
+  1% {
     opacity: var(--op, 1); /* 開始直後にふわっと出現 */
     filter: blur(0px);
     transform: translateY(0) scale(1);

@@ -417,7 +417,7 @@ function displayWhispers(messages, isMobile) {
     const floatDelay = (Math.random() * 2).toFixed(2);
 
     // CSSで定義した vanishSmoke(180秒で消滅) と floatSmall(ふよふよ) を同時適用
-    el.style.animation = `vanishSmoke 180s forwards, floatSmall ${floatDuration}s ease-in-out infinite ${floatDelay}s`;
+    el.style.animation = `vanishSmoke 180s forwards, floatSmall ${floatDuration}s ${floatDelay}s ease-in-out infinite`;
 
     whispersContainer.appendChild(el);
   });
