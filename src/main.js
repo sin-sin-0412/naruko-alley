@@ -77,7 +77,7 @@ class App {
       blendFunction: BlendFunction.OVERLAY,
       premultiply: false,
     });
-    this.noiseEffect.blendMode.opacity.value = 0.35;
+    this.noiseEffect.blendMode.opacity.value = 0.3;
 
     /*
     NORMAL → 普通に重ねる

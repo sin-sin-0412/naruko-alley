@@ -280,6 +280,9 @@ body .audio-toggle-btn {
 }
 
 /* --- アニメーション・各パーツの個別調整 --- */
+.chat-toggle-btn{
+  animation: floatMedium 5.5s ease-in-out infinite;
+}
 
 .chat-input-name {
   animation: floatMedium 5s ease-in-out infinite;
@@ -457,6 +460,7 @@ body .audio-toggle-btn {
   pointer-events: auto;
   transition: opacity 0.3s;
   border: none;
+  will-change: transform;
 }
 .audio-toggle-btn:hover {
   opacity: 0.3 !important;
